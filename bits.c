@@ -185,8 +185,8 @@ int bitAnd(int x, int y) {//check to make sure syntax is all good
  *   Rating: 2
  */
 int getByte(int x, int n) {
-  int t=x<<(6-n*2);
-  return t>>(6)
+  return (0xFF & (x >> (n << 3)));
+
 }
 /* 
  * logicalShift - shift x to the right by n, using a logical shift
@@ -197,17 +197,26 @@ int getByte(int x, int n) {
  *   Rating: 3 
  */
 int logicalShift(int x, int n) {
-  return 2;
+  return ((x >> n) & ((1 << ((~n + 1) + 32)) + ~0));
 }
 /*
  * bitCount - returns count of number of 1's in word
  *   Examples: bitCount(5) = 2, bitCount(7) = 3
- *   Legal ops: ! ~ & ^ | + << >>
+ *   Legal ops: ! ~ & ^ 0| + << >>
  *   Max ops: 40
  *   Rating: 4
  */
 int bitCount(int x) {
-  return 2;
+  int m1=0x11|(0x11<<8);
+  int m2=m1|(m1<<16);
+  int sum=x&m2;
+  sum=sum+((x>>1)&m2);
+  sum=sum+((x>>2)&m2);
+  sum=sum+((x>>3)&m2);
+  sum=sum+(sum>>16);
+  m1=0xF|(0xF<<8);
+  sum=(sum&m1)+((sum>>4)&m1);
+  return ((sum+(sum>>8)) &0x3F);
 }
 /* 
  * bang - Compute !x without using !
@@ -217,7 +226,14 @@ int bitCount(int x) {
  *   Rating: 4 
  */
 int bang(int x) {
-  return 2;
+  //int nx=~x+1;
+  //return ((((x>>31)&0x01)|((nx>>31)&0x01)^0x01)
+  x=(x>>16)^x;
+  x=(x>>8)^x;
+  x=(x>>4)^x;
+  x=(x>>2)^x;
+  x=(x>>1)^x;
+  return (x&1);
 }
 /* 
  * tmin - return minimum two's complement integer 
@@ -239,8 +255,8 @@ int tmin(void) {
  *   Rating: 2
  */
 int fitsBits(int x, int n) {
-
-  return 2;
+  int mask=x>>31;
+  return !(((~x&mask)+(x&~mask))>>(n+~0));
 }
 /* 
  * divpwr2 - Compute x/(2^n), for 0 <= n <= 30
@@ -251,8 +267,9 @@ int fitsBits(int x, int n) {
  *   Rating: 2
  */
 int divpwr2(int x, int n) {
-  n=1<<n;
-
+  int mask=(1<<n)+~0;
+  int eq=(x>>31)&mask; 
+  return (x+eq)>>n;
 }
 /* 
  * negate - return -x 
@@ -273,7 +290,7 @@ int negate(int x) {
  *   Rating: 3
  */
 int isPositive(int x) {
-  return 2;
+  return ((~x & (~x + 1)) >> 31) & 1;
 }
 /* 
  * isLessOrEqual - if x <= y  then return 1, else return 0 
@@ -283,7 +300,14 @@ int isPositive(int x) {
  *   Rating: 3
  */
 int isLessOrEqual(int x, int y) {
-  return 2;
+  int sign_of_x=x>>31;
+  int sign_of_y=y>>31;
+  int combsign=sign_of_x^sign_of_y;
+  int override_bye=combsign&sign_of_x;
+  int z=((y+(~x)+1))>>31;
+  return (!((z|combsign)^override_bye));
+  //int equal=!(sign_of_x^sign_of_y);
+  //return 2;
 }
 /*
  * ilog2 - return floor(log base 2 of x), where x > 0
@@ -293,7 +317,26 @@ int isLessOrEqual(int x, int y) {
  *   Rating: 4
  */
 int ilog2(int x) {
-  return 2;
+  int mask1=0xFF<<24|0xFF<<16;
+  int mask2=0xFF<<8;
+  int mask3=0xF0;
+  int mask4=0x0C;
+  int output=0;
+  int shift;
+  output=!!(x&mask1)<<4;
+  x>>=output;
+  shift=!!(x&mask2)<<3;
+  x>>=shift;
+  output+=shift;
+  shift=!!(x&mask3)<<2;
+  x>>=shift;
+  output+=shift;
+  shift=!!(x&mask4)<<1;
+  x>>=shift;
+  output+=shift;
+  output+=(x>>1);
+  return output;
+  //return 2;
 }
 /* 
  * float_neg - Return bit-level equivalent of expression -f for
