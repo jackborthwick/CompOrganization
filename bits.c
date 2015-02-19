@@ -350,8 +350,12 @@ int ilog2(int x) {
  *   Rating: 2
  */
 unsigned float_neg(unsigned uf) {
-  
- return 2;
+  unsigned mask=0x80000000;
+  unsigned NaN=0x7FC00000;
+  unsigned inf=0xFFc00000;
+  if(uf==NaN||uf==inf)
+    return uf;
+  return uf^mask;
 }
 /* 
  * float_i2f - Return bit-level equivalent of expression (float) x

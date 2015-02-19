@@ -38,10 +38,11 @@ int main(int argc, char **argv)
     int x07 = x04 ^ x06;
     int x08 = 1 << 31;
     int x09 = -x08;
-    int x10 = x08 - 1;
-    float x11 = 1.25;
+    int x10 = x08;
+    unsigned x11 = 1.25;
     float x12 = -1;
-    float x13 = -1.5;
+    unsigned x13 = 0x80000000;
+    float x14 = x13^x11;
 
  	print_bits_int( x01 );
     printf( " ( x01 )\n" );
@@ -69,4 +70,6 @@ int main(int argc, char **argv)
     printf( " ( x12 )\n" );
     print_bits_float( x13 );
     printf( " ( x13 )\n" );
+    print_bits_float( x14 );
+    printf( " ( x14 )\n" );
 }
