@@ -350,6 +350,7 @@ int ilog2(int x) {
  *   Rating: 2
  */
 unsigned float_neg(unsigned uf) {
+  
  return 2;
 }
 /* 
