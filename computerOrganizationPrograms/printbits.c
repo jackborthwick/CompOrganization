@@ -39,10 +39,10 @@ int main(int argc, char **argv)
     int x08 = 1 << 31;
     int x09 = -x08;
     int x10 = x08;
-    unsigned x11 = 1.25;
-    float x12 = -1;
+    unsigned x11 = 1102893;
+    float x12 = 0x80000000;
     unsigned x13 = 0x80000000;
-    float x14 = x13^x11;
+    float x14 = x11^x13;
 
  	print_bits_int( x01 );
     printf( " ( x01 )\n" );

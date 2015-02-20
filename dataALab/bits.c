@@ -367,7 +367,33 @@ unsigned float_neg(unsigned uf) {
  *   Rating: 4
  */
 unsigned float_i2f(int x) {
-  return 2;
+  int sign=(x>>31);
+  unsigned temp=x;
+  unsigned value=temp;
+  int exp=0;
+  unsigned frac=0;
+  unsigned rounder=0;
+  int rounder_offset=0;
+  unsigned tmin=1<<31;
+  if (!x)
+    return 0;
+  if (sign)
+    temp=~x+1;
+  value=temp;
+  while (temp){
+    temp=temp>>1;
+    exp=exp+1;
+  }
+  frac=value<<(33-exp);
+  rounder=frac<<23;
+  if (rounder>tmin)
+    rounder_offset=1;
+  if((rounder==tmin)&&(frac>>9)&1)
+    rounder_offset=1;
+  exp=exp+126;
+  sign=sign&1;
+  return ((sign<<31)|(exp<<23)|(frac>>9))+rounder_offset;
+  //return 2;
 }
 /* 
  * float_twice - Return bit-level equivalent of expression 2*f for
@@ -381,5 +407,20 @@ unsigned float_i2f(int x) {
  *   Rating: 4
  */
 unsigned float_twice(unsigned uf) {
-  return 2;
+  unsigned exponent=(uf>>23)&0xFF;
+  unsigned sign=uf&0x80000000;
+  unsigned frac=uf&0x007FFFFF;
+  if (exponent==255||(exponent==0&&frac==0))//checking if it is a normalied float
+    return uf;
+  if (exponent){
+    exponent++;
+  }
+  else if (frac==0x7FFFFF){
+    frac--;
+    exponent++;
+  }
+  else{
+    frac<<=1;
+  }
+  return (sign)|(exponent<<23)|(frac);
 }
