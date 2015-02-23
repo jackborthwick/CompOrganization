@@ -1,0 +1,42 @@
+3.54
+
+#inclue <stdio.h>
+int decode2(int x,int y, int z){
+	int p=y;
+	p=p-z;
+	int t=p;
+	t=t<<31;
+	t=t>>31;
+	p=p*x;
+	t=t^p;
+	return t;
+}
+
+
+3.55
+
+
+Since we know that y is of type long long we nkow that it is represented using 8 spots in the register rather than just 4,  with y_h being the values represented by the high order 32 bits and y_l being the low-order 32 bits.  so y=y_h*2^32+y_l.  so x*y=x*y_h*2^32 +x*y_l. and since we are not using unsiged multiplication we must also multiply the parts by the sign of the other to ensure that proper multiplication has been done.  so we get x*y_h + then we do y_l* (x*y_h) and then add the two to get another portion of the answer,  then we multiply y_l with the lower bit values from the previous calculations.  and then we add them all together.  
+
+
+
+so we first make x a 64 bit number by copying over its sign bit.  we then multiply x by y_h and mlutiply the higher order 32 bits of the product by the lower 32 bits of y, then add up the 2 sets of higher 32 bits, and multiply y by the lower 32 bits of the product of the previous calculations.  
+
+
+
+
+dest at %ebp +8, x at %ebp +12, y at %ebp +16
+1	movl	16(%ebp), %esi    get y_l, put in %esi
+2	movl	12(%ebp), %eax		get x, put in %eax
+3	movl	%eax, %edx		copy x to %edx
+4	sarl	$31, %edx		copy the sign of x over so we represent x as a 64 bit number 
+5	movl	20(%ebp), %ecx  copy y_h to %ecx  
+6	imull	%eax, %ecx		compute x*y_h
+7	movl	%edx, %ebx		store the top 32 bits from the product in ebx 
+8	imull	%esi, %ebx    now we calculate y_l * the product from above
+9	addl	%ebx, %ecx    add the value high order bits * x to what was computed above 
+10	mull	%esi  multiply y_l by the lower 32 bits of the product above this will set eax to the full 32 bit representation of the lower 32 bits of the number
+11	leal	(%ecx,%edx), %edx  add high order bits from line 9 to ones begotten from mull in line 10 to get the full 32 bit number for higher order of 32 bits
+12	movl	8(%ebp), %ecx  get dest
+13	movl	%eax, (%ecx)  put the lower order bits in the right spot in relation to dest
+14	movl	%edx, 4(%ecx)  put the higher order bits in relation to dest and the lower order bits
