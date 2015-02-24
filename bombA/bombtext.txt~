@@ -1,0 +1,17 @@
+The moon unit will be divided into two divisions.
+7 8 10 13 17 22
+
+eax changes 6, at first cmpljjust before add goes to 1 then to 8 immediately
+after 8 eax goes to 2 not 1 
+ebx from 0 to 1 now to 10
+
+7 29)
+9
+yoyoyoy
+yoyoyoyoy
+yoyoyoyyoyoy
+yoyoyoyoyoyoyo
+48
+53
+
+134530096 -134230016 134520715 134520704 -134504448 6583137
