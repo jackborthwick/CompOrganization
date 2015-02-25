@@ -1,0 +1,61 @@
+Dump of assembler code for function phase_3:
+=> 0x08048c01 <+0>:	sub    $0x2c,%esp  //allocate memory	
+   0x08048c04 <+3>:	lea    0x1c(%esp),%eax  //$eax=&frame[7]
+   0x08048c08 <+7>:	mov    %eax,0xc(%esp)  //frame[3]=&frame[7]
+   0x08048c0c <+11>:	lea    0x18(%esp),%eax //$eax=&frame[6]
+   0x08048c10 <+15>:	mov    %eax,0x8(%esp) //frame[2]=
+   0x08048c14 <+19>:	movl   $0x804a32f,0x4(%esp) //frame[1]=??
+   0x08048c1c <+27>:	mov    0x30(%esp),%eax  //$eax=frame[12]
+   0x08048c20 <+31>:	mov    %eax,(%esp)  //frame[0]=frame[12]
+   0x08048c23 <+34>:	call   0x8048860 <__isoc99_sscanf@plt>  
+   0x08048c28 <+39>:	cmp    $0x1,%eax
+   0x08048c2b <+42>:	jg     0x8048c32 <phase_3+49>
+   0x08048c2d <+44>:	call   0x8049135 <explode_bomb>
+   0x08048c32 <+49>:	cmpl   $0x7,0x18(%esp)
+   0x08048c37 <+54>:	ja     0x8048c95 <phase_3+148>
+   0x08048c39 <+56>:	mov    0x18(%esp),%eax
+   0x08048c3d <+60>:	jmp    *0x804a1c0(,%eax,4)
+   0x08048c44 <+67>:	mov    $0x0,%eax
+   0x08048c49 <+72>:	jmp    0x8048c50 <phase_3+79>
+   0x08048c4b <+74>:	mov    $0x1b9,%eax
+   0x08048c50 <+79>:	sub    $0x2e1,%eax
+   0x08048c55 <+84>:	jmp    0x8048c5c <phase_3+91>
+   0x08048c57 <+86>:	mov    $0x0,%eax
+---Type <return> to continue, or q <return> to quit---
+   0x08048c5c <+91>:	add    $0x89,%eax
+   0x08048c61 <+96>:	jmp    0x8048c68 <phase_3+103>
+   0x08048c63 <+98>:	mov    $0x0,%eax
+   0x08048c68 <+103>:	sub    $0x57,%eax
+   0x08048c6b <+106>:	jmp    0x8048c72 <phase_3+113>
+   0x08048c6d <+108>:	mov    $0x0,%eax
+   0x08048c72 <+113>:	add    $0x57,%eax
+   0x08048c75 <+116>:	jmp    0x8048c7c <phase_3+123>
+   0x08048c77 <+118>:	mov    $0x0,%eax
+   0x08048c7c <+123>:	sub    $0x57,%eax
+   0x08048c7f <+126>:	jmp    0x8048c86 <phase_3+133>
+   0x08048c81 <+128>:	mov    $0x0,%eax
+   0x08048c86 <+133>:	add    $0x57,%eax
+   0x08048c89 <+136>:	jmp    0x8048c90 <phase_3+143>
+   0x08048c8b <+138>:	mov    $0x0,%eax
+   0x08048c90 <+143>:	sub    $0x57,%eax
+   0x08048c93 <+146>:	jmp    0x8048c9f <phase_3+158>
+   0x08048c95 <+148>:	call   0x8049135 <explode_bomb>
+   0x08048c9a <+153>:	mov    $0x0,%eax
+   0x08048c9f <+158>:	cmpl   $0x5,0x18(%esp)
+   0x08048ca4 <+163>:	jg     0x8048cac <phase_3+171>
+   0x08048ca6 <+165>:	cmp    0x1c(%esp),%eax
+   0x08048caa <+169>:	je     0x8048cb1 <phase_3+176>
+---Type <return> to continue, or q <return> to quit---
+   0x08048cac <+171>:	call   0x8049135 <explode_bomb>
+   0x08048cb1 <+176>:	add    $0x2c,%esp
+   0x08048cb4 <+179>:	ret    
+End of assembler dump.
+
+
+
+(gdb) x/10w 0x804a1c0
+0x804a1c0:	0x08048c4b	0x08048c44	0x08048c57	0x08048c63
+0x804a1d0:	0x08048c6d	0x08048c77	0x08048c81	0x08048c8b
+0x804a1e0 <array.3143>:	0x0000000a	0x00000002
+
+
