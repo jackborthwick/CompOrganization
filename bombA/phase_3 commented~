@@ -1,13 +1,13 @@
 Dump of assembler code for function phase_3:
-=> 0x08048c01 <+0>:	sub    $0x2c,%esp
-   0x08048c04 <+3>:	lea    0x1c(%esp),%eax
-   0x08048c08 <+7>:	mov    %eax,0xc(%esp)
-   0x08048c0c <+11>:	lea    0x18(%esp),%eax
-   0x08048c10 <+15>:	mov    %eax,0x8(%esp)
-   0x08048c14 <+19>:	movl   $0x804a32f,0x4(%esp)
-   0x08048c1c <+27>:	mov    0x30(%esp),%eax
-   0x08048c20 <+31>:	mov    %eax,(%esp)
-   0x08048c23 <+34>:	call   0x8048860 <__isoc99_sscanf@plt>
+=> 0x08048c01 <+0>:	sub    $0x2c,%esp  //allocate memory	
+   0x08048c04 <+3>:	lea    0x1c(%esp),%eax  //$eax=&frame[7]
+   0x08048c08 <+7>:	mov    %eax,0xc(%esp)  //frame[3]=&frame[7]
+   0x08048c0c <+11>:	lea    0x18(%esp),%eax //$eax=&frame[6]
+   0x08048c10 <+15>:	mov    %eax,0x8(%esp) //frame[2]=
+   0x08048c14 <+19>:	movl   $0x804a32f,0x4(%esp) //frame[1]=??
+   0x08048c1c <+27>:	mov    0x30(%esp),%eax  //$eax=frame[12]
+   0x08048c20 <+31>:	mov    %eax,(%esp)  //frame[0]=frame[12]
+   0x08048c23 <+34>:	call   0x8048860 <__isoc99_sscanf@plt>  
    0x08048c28 <+39>:	cmp    $0x1,%eax
    0x08048c2b <+42>:	jg     0x8048c32 <phase_3+49>
    0x08048c2d <+44>:	call   0x8049135 <explode_bomb>
@@ -50,4 +50,12 @@ Dump of assembler code for function phase_3:
    0x08048cb1 <+176>:	add    $0x2c,%esp
    0x08048cb4 <+179>:	ret    
 End of assembler dump.
+
+
+
+(gdb) x/10w 0x804a1c0
+0x804a1c0:	0x08048c4b	0x08048c44	0x08048c57	0x08048c63
+0x804a1d0:	0x08048c6d	0x08048c77	0x08048c81	0x08048c8b
+0x804a1e0 <array.3143>:	0x0000000a	0x00000002
+
 
