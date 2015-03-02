@@ -1,1 +1,16 @@
 aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa aa
+
+
+08048cad  memory location of code we want to start running
+
+0x804d100 <global_value>
+
+
+break *getbuf+17
+
+
+
+start of buffer array 0x55683658
+
+0x55683678 +16 = $ebp
+0x55683678+24= return address of ebp
