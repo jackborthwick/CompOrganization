@@ -69,7 +69,7 @@ team_t team = {
 #define NEXT_BLKBP(bp)  ((char *)(bp) + GET_SIZE(((char *)(bp) - WSIZE)))
 #define PREV_BLKBP(bp)  ((char *)(bp) - GET_SIZE(((char *)(bp) - DSIZE)))
 
-
+int coalesceCount;
 static void *coalesce(void *bp){
 	size_t prev_alloc = GET_ALLOC(FTRP(PREV_BLKBP(bp)));
 	size_t next_alloc = GET_ALLOC(HDRP(NEXT_BLKBP(bp)));
@@ -161,6 +161,39 @@ static void place(void *bp, size_t asize)
 		PUT(FTRP(bp), PACK(csize, 1));
 	}
 }
+int checkFree(void *ptr){
+	//size_t prev = GET_ALLOC(FTRP(PREV_BLKBP(ptr)));
+	size_t next = GET_ALLOC(HDRP(NEXT_BLKBP(ptr)));
+	size_t curr = GET_ALLOC(HDRP(ptr));
+	int areFree=0;
+	if (!curr && !next){
+		areFree=1;
+	}
+	return areFree;
+}
+//heap checker
+int heapchecker()
+{
+	void *ptr = heap_listp;
+	int contiguousFrees = 0;
+	while(GET_SIZE(HDRP(ptr))>0){
+		if(checkFree(ptr)){
+			contiguousFrees++;
+		}
+		ptr=NEXT_BLKBP(ptr);
+	}
+	printf("%d\n", contiguousFrees);
+	return 0;
+}
+
+
+
+
+
+
+
+
+
 /* 
  * mm_malloc - Allocate a block by incrementing the brk pointer.
  *     Always allocate a block whose size is a multiple of the alignment.
@@ -189,6 +222,7 @@ void *mm_malloc(size_t size)
 	if((bp = extend_heap(newsize/WSIZE)) == NULL)
 		return NULL;
 	place(bp, asize);
+	//heapchecker();
 	return bp;
     //int newsize = ALIGN(size + SIZE_T_SIZE);
     //void *p = mem_sbrk(newsize);
@@ -204,15 +238,22 @@ void *mm_malloc(size_t size)
 /*
  * mm_free - Freeing a block does nothing.
  */
-
 void mm_free(void *bp)
 {
 	size_t size = GET_SIZE(HDRP(bp));
 
 	PUT(HDRP(bp), PACK(size, 0));
 	PUT(FTRP(bp), PACK(size, 0));
-	coalesce(bp);
+	if (coalesceCount%4 == 0){
+		coalesce(bp);
+	}
+	else{
+		coalesceCount++;
+		//printf("%d",coalesceCount );
+	} 
+	//printf("%d",coalesceCount );
 }
+
 
 
 
@@ -230,22 +271,27 @@ void *mm_realloc(void *ptr, size_t size)
     void *newptr;
     size_t copySize;
     
+    if (ptr == NULL){
+    	return NULL;
+    }
+    if (size==0){
+    	mm_free(ptr);
+    	return NULL;
+    }
     newptr = mm_malloc(size);
     if (newptr == NULL)
       return NULL;
-    copySize = *(size_t *)((char *)oldptr - SIZE_T_SIZE);
+    if(size <= DSIZE){  //if the input is less than the min
+		copySize = 2*DSIZE; //set size to d*2
+	}
+	else  //else make the size same way we did in malloc
+		copySize = DSIZE * ((size + (DSIZE) + (DSIZE-1)) / DSIZE);
     if (size < copySize)
       copySize = size;
     memcpy(newptr, oldptr, copySize);
     mm_free(oldptr);
     return newptr;
 }
-
-
-
-
-
-
 
 
 
